@@ -4,7 +4,7 @@ import pandas as pd
 
 # --- 1. 確保網址正確且不含中文字元 ---
 # 請務必將下方的網址替換為您正確的 Google Sheet 網址
-SHEET_URL = "https://docs.google.com/spreadsheets/d/1nWfDI8Rr1zL5UCiLnWgKW5SWVRHSfFE5w3o9xfG6TqU/edit?usp=sharing"
+SHEET_URL = "https://docs.google.com/spreadsheets/d/1nWfDI8Rr1zL5UCiLnWgKW5SWVRHSfFE5w3o9xfG6TqU/edit"
 
 st.set_page_config(page_title="期末互評系統", layout="centered")
 st.title("🎓 期末專案互評系統")
