@@ -1,16 +1,12 @@
 import streamlit as st
-from streamlit_gsheets import GSheetsConnection
-import pandas as pd
+import requests
+import json
 
-# --- 1. 確保網址正確且不含中文字元 ---
-# 請務必將下方的網址替換為您正確的 Google Sheet 網址
-SHEET_URL = "https://docs.google.com/spreadsheets/d/1nWfDI8Rr1zL5UCiLnWgKW5SWVRHSfFE5w3o9xfG6TqU/edit"
+# --- 這裡填入您剛才複製的「網頁應用程式網址」 ---
+WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz74A4qBbxvkJ6BMT5_qt2-ghr6Lp8KcaKnMevoticZtsFGms9Sr7NvtgQ-s8IM9WVaTA/exec"
 
 st.set_page_config(page_title="期末互評系統", layout="centered")
 st.title("🎓 期末專案互評系統")
-
-# 建立連線
-conn = st.connection("gsheets", type=GSheetsConnection)
 
 # --- 側邊欄 ---
 with st.sidebar:
@@ -23,7 +19,7 @@ with st.sidebar:
 # --- 主畫面 ---
 if my_group != "請選擇" and name and sid:
     other_groups = [g for g in groups if g != my_group]
-    st.info(f"您好 {name}，系統已為您隱藏 {my_group}，請開始評分。")
+    st.info(f"您好 {name}，系統已自動為您過濾掉「{my_group}」。")
 
     all_data = []
     for target in other_groups:
@@ -32,31 +28,22 @@ if my_group != "請選擇" and name and sid:
             s2 = st.slider(f"{target} - 用戶期待", 1, 10, 5, key=f"s2_{target}")
             s3 = st.slider(f"{target} - 商業存續性", 1, 10, 5, key=f"s3_{target}")
             s4 = st.slider(f"{target} - 技術可行性", 1, 10, 5, key=f"s4_{target}")
-            comment = st.text_input(f"{target} 的建議", key=f"c_{target}")
-            # 確保資料為字串格式，避免編碼錯誤
-            all_data.append([str(name), str(sid), str(my_group), str(target), s1, s2, s3, s4, str(comment)])
+            comment = st.text_input(f"{target} 的具體建議", key=f"c_{target}")
+            # 整理成 Apps Script 需要的一行行格式
+            all_data.append([name, sid, my_group, target, s1, s2, s3, s4, comment])
 
     if st.button("提交所有評分"):
-        try:
-            # 1. 讀取現有資料 (如果失敗會跳到 except)
-            df = conn.read(spreadsheet=SHEET_URL, worksheet="Sheet1")
-            
-            # 2. 準備新資料
-            new_rows = pd.DataFrame(all_data, columns=["姓名", "學號", "所屬組別", "受評組別", "創新", "期待", "存續", "技術", "建議"])
-            
-            # 3. 如果現有資料是空的（只有標題），直接用新資料；否則合併
-            # 這是為了處理讀取到空 DataFrame 的 400 錯誤
-            if df.empty or df.columns.empty:
-                updated_df = new_rows
-            else:
-                updated_df = pd.concat([df, new_rows], ignore_index=True)
-            
-            # 4. 寫回雲端
-            conn.update(spreadsheet=SHEET_URL, worksheet="Sheet1", data=updated_df)
-            
-            st.success("✅ 提交成功！")
-            st.balloons()
-        except Exception as e:
-            # 如果還是 400，顯示更細節的資訊
-            st.error(f"連線失敗：{str(e)}")
-            st.info("請檢查：1. 試算表權限是否設為『編輯者』？ 2. 標題列是否已手動填寫？")
+        with st.spinner('正在上傳資料，請稍候...'):
+            try:
+                # 使用 requests 將資料送往 Google Apps Script
+                response = requests.post(WEB_APP_URL, data=json.dumps(all_data))
+                
+                if response.text == "Success":
+                    st.success("✅ 提交成功！資料已安全存入雲端。")
+                    st.balloons()
+                else:
+                    st.error("連線成功但回應異常，請聯繫助教。")
+            except Exception as e:
+                st.error(f"連線失敗：{str(e)}")
+else:
+    st.warning("請先於左側選單填寫基本資料。")
