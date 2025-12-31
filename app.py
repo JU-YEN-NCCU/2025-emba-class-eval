@@ -3,7 +3,7 @@ from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 
 # 這裡換成您的 Google Sheets 網址 (確認權限為「知道連結的人均可編輯」)
-SHEET_URL = "在此輸入您的GOOGLE試算表網址"
+SHEET_URL = "https://docs.google.com/spreadsheets/d/1nWfDI8Rr1zL5UCiLnWgKW5SWVRHSfFE5w3o9xfG6TqU/edit?usp=sharing"
 
 st.set_page_config(page_title="期末互評系統", layout="centered")
 st.title("🎓 期末專案互評系統")
