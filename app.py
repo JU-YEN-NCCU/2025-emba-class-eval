@@ -38,21 +38,25 @@ if my_group != "請選擇" and name and sid:
 
     if st.button("提交所有評分"):
         try:
-            # 指定 worksheet="Sheet1" 避開中文標籤名稱問題
+            # 1. 讀取現有資料 (如果失敗會跳到 except)
             df = conn.read(spreadsheet=SHEET_URL, worksheet="Sheet1")
             
+            # 2. 準備新資料
             new_rows = pd.DataFrame(all_data, columns=["姓名", "學號", "所屬組別", "受評組別", "創新", "期待", "存續", "技術", "建議"])
             
-            # 使用 pd.concat 組合舊資料與新資料
-            updated_df = pd.concat([df, new_rows], ignore_index=True)
+            # 3. 如果現有資料是空的（只有標題），直接用新資料；否則合併
+            # 這是為了處理讀取到空 DataFrame 的 400 錯誤
+            if df.empty or df.columns.empty:
+                updated_df = new_rows
+            else:
+                updated_df = pd.concat([df, new_rows], ignore_index=True)
             
-            # 寫回雲端 (指定寫入 Sheet1)
+            # 4. 寫回雲端
             conn.update(spreadsheet=SHEET_URL, worksheet="Sheet1", data=updated_df)
             
-            st.success("✅ 提交成功！請關閉頁面或通知助教。")
+            st.success("✅ 提交成功！")
             st.balloons()
         except Exception as e:
-            # 這裡會顯示具體的錯誤訊息，方便除錯
+            # 如果還是 400，顯示更細節的資訊
             st.error(f"連線失敗：{str(e)}")
-else:
-    st.warning("請先完整填寫左側個人資料，以啟動評分介面。")
+            st.info("請檢查：1. 試算表權限是否設為『編輯者』？ 2. 標題列是否已手動填寫？")
