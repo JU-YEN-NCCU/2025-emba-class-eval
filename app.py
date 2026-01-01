@@ -3,7 +3,7 @@ import requests
 import json
 
 # --- 這裡請維持您原本的 Apps Script 網址 ---
-WEB_APP_URL = "https://script.google.com/macros/library/d/11egfvTY7y5Mif8i2NefD5momRkCYuaceO0z6U4_Gz-1Q1-EVnYt4_UBA/3"
+WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz74A4qBbxvkJ6BMT5_qt2-ghr6Lp8KcaKnMevoticZtsFGms9Sr7NvtgQ-s8IM9WVaTA/exec"
 
 st.set_page_config(page_title="期末互評系統", layout="centered")
 st.title("🎓 期末專案互評系統")
