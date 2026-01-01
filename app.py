@@ -34,7 +34,7 @@ if my_group != "請選擇" and name and sid:
         st.markdown("""
         **說明：**
         
-        * 發想階段有夠多的out of box ideas
+        * 發想階段有足夠多的out of box ideas
         * 有意義的解決方案（人的需求和期待、商業的存續性與技術的可行性的平衡）
         * 建立軟硬體生態圈的可能性
         """)
