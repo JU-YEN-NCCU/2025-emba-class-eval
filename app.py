@@ -3,7 +3,7 @@ import requests
 import json
 
 # --- 這裡請維持您原本的 Apps Script 網址 ---
-WEB_APP_URL = "您的_APPS_SCRIPT_網址"
+WEB_APP_URL = "https://docs.google.com/spreadsheets/d/1nWfDI8Rr1zL5UCiLnWgKW5SWVRHSfFE5w3o9xfG6TqU/edit"
 
 st.set_page_config(page_title="期末互評系統", layout="centered")
 st.title("🎓 期末專案互評系統")
