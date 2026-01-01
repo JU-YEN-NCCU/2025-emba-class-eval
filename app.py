@@ -32,8 +32,8 @@ if my_group != "請選擇" and name and sid:
         # 項目 1：整合性創新
         st.markdown("### 1. 整合性創新 Innovation")
         st.caption("評分參考：\n"
-                   "a. 發想階段夠多Out of box ideas"
-                   "b. 平衡需求/商業/技術之方案"
+                   "a. 發想階段夠多Out of box ideas\n"
+                   "b. 平衡需求/商業/技術之方案\n"
                    "c. 建立生態圈可能性")
         s1 = st.slider("評分 (1-10分)", 1, 10, 5, key=f"s1_{target}")
 
@@ -41,11 +41,28 @@ if my_group != "請選擇" and name and sid:
 
         # 項目 2：綜合評分 (DVF)
         st.markdown("### 2. 綜合評分 (D/V/F)")
-        st.caption("評分參考：\n"
-                   "- 用戶期待(Desirability)：定義洞見、解決顯/隱性需求、驗證需求。\n"
-                   "- 商業存續(Viability)：供應鏈策略、市場導入評估、成本預算計畫。\n"
-                   "- 技術可行(Feasibility)：原型測試發現錯誤、開發支撐量產、技術藍圖。")
-        s2 = st.slider("評分 (1-10分)", 1, 10, 5, key=f"s2_{target}")
+        
+        # 使用 Markdown 詳細列出 a-i 點說明
+        st.markdown("""
+        **評分參考指標：**
+        
+        **🔍 用戶期待 Desirability**
+        * a. 定義問題與架構以形成洞見（Insight）
+        * b. 解決顯性與隱性的用戶需求
+        * c. 有驗證需求的方法、再次確認用戶之所需
+        
+        **💰 商業存續性 Viability**
+        * d. 考量整體商業可能性、包括供應鏈及相關策略
+        * e. 市場導入的需求評估、含可能競爭者之其他解決方案
+        * f. 可執行的產品成本或預算計畫評估
+        
+        **🛠️ 技術可行性 Feasibility**
+        * g. 原型（Prototyping）驅動的早期測試和錯誤發現
+        * h. 預先技術評估與開發以支撐量產上市時之所需
+        * i. 以用戶體驗為前提的技術發展藍圖（Roadmap）
+        """)
+        
+        s2 = st.slider("綜合評分 (1-10分)", 1, 10, 5, key=f"s2_{target}")
 
         st.write("") # 間隔
 
